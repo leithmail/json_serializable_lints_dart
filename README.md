@@ -70,6 +70,7 @@ Ignore for a whole file:
 
 ## More info
 
+- [`json_serializable` on pub.dev](https://pub.dev/packages/json_serializable)
 - [`analysis_server_plugin` package](https://pub.dev/packages/analysis_server_plugin)
 - [Dart analyzer plugin docs / examples](https://github.com/dart-lang/sdk/tree/main/pkg/analyzer_plugin)
 
