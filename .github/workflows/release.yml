@@ -50,11 +50,7 @@ jobs:
         run: |
           cat pubspec.yaml
           cat CHANGELOG.md
-
-          # ignore dart publish complaining about uncommited changes
-          git stash
-          dart pub publish --dry-run
-          git stash pop
+          dart pub publish --ignore-warnings
 
       - name: Publish
         run: dart pub publish --force
