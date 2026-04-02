@@ -50,7 +50,7 @@ jobs:
         run: |
           cat pubspec.yaml
           cat CHANGELOG.md
-          dart pub publish --ignore-warnings
+          dart pub publish --dry-run --ignore-warnings
 
       - name: Publish
         run: dart pub publish --force
