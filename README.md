@@ -16,36 +16,15 @@ These rules are skipped when you explicitly disable generation with `createFacto
 Add the package to your Dart or Flutter project:
 
 ```yaml
-# pubspec.yaml
-dev_dependencies:
-  json_serializable_lints:
-```
-
-Enable the plugin:
-
-```yaml
 # analysis_options.yaml
-analyzer:
-  plugins:
-    - json_serializable_lints
+plugins:
+  json_serializable_lints: any
 ```
 
-Minimal example:
+Run analysis:
 
-```dart
-import 'package:json_annotation/json_annotation.dart';
-
-part 'user.g.dart';
-
-@JsonSerializable()
-class User {
-  final String name;
-
-  User(this.name);
-
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
-  Map<String, dynamic> toJson() => _$UserToJson(this);
-}
+```sh
+dart analyze
 ```
 
 ## Ignoring rules
@@ -72,7 +51,6 @@ Ignore for a whole file:
 
 - [`json_serializable` on pub.dev](https://pub.dev/packages/json_serializable)
 - [`analysis_server_plugin` package](https://pub.dev/packages/analysis_server_plugin)
-- [Dart analyzer plugin docs / examples](https://github.com/dart-lang/sdk/tree/main/pkg/analyzer_plugin)
 
 ## Contributing
 
