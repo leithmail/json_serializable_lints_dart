@@ -46,16 +46,13 @@ jobs:
             | jq -r '"## \(.tagName | ltrimstr("v"))\n\n\(.body)\n"' \
             >> CHANGELOG.md
 
-      - name: Commit temp files
-        run: |
-          git add .
-          git commit -m "temp release files"
-
       - name: Publish dry run
         run: |
           cat pubspec.yaml
           cat CHANGELOG.md
+          git stash # ignore dart publish complaining about uncommited changes
           dart pub publish --dry-run
+          git stash pop
 
       - name: Publish
         run: dart pub publish --force
