@@ -1,9 +1,11 @@
 name: json_serializable_lints
 version: 0.0.1
+description: Dart custom lint rules for json_serializable package.
+homepage: https://github.com/leithmail/json_serializable_lints_dart
 
 environment:
   sdk: ^3.0.0
 
 dependencies:
   analysis_server_plugin: ^0.3.13
-  analyzer:
+  analyzer: '>=12.0.0 <13.0.0'

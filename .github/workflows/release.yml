@@ -49,7 +49,9 @@ jobs:
         run: |
           cat pubspec.yaml
           cat CHANGELOG.md
+          git stash
           dart pub publish --dry-run
+          git stash pop
 
       - name: Publish
         if: false
