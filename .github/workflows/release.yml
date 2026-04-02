@@ -1,0 +1,56 @@
+name: Publish to pub.dev
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Set version from tag
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+' \
+            || (echo "Invalid semver tag: $VERSION" && exit 1)
+          sed -i "s/^version:.*/version: $VERSION/" pubspec.yaml
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Static analysis
+        run: dart analyze
+
+      - name: Generate CHANGELOG from all GitHub Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "# Changelog" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          gh api repos/:owner/:repo/releases --paginate \
+            --jq '.[] | {tagName: .tag_name, body: .body}' \
+            | jq -s '[.[] | select(.tagName | ltrimstr("v") | test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))] 
+              | sort_by(.tagName | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[]' \
+            | jq -r '"## \(.tagName | ltrimstr("v"))\n\n\(.body)\n"' \
+            >> CHANGELOG.md
+
+      - name: Publish dry run
+        run: |
+          cat pubspec.yaml
+          cat CHANGELOG.md
+          dart pub publish --dry-run
+
+      - name: Publish
+        if: false
+        run: dart pub publish --force
