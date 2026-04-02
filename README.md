@@ -27,25 +27,7 @@ Run analysis:
 dart analyze
 ```
 
-## Ignoring rules
-
-Ignore a single violation:
-
-```dart
-// ignore: require_json_serializable_to_json
-@JsonSerializable()
-class LegacyUser {
-  LegacyUser();
-
-  factory LegacyUser.fromJson(Map<String, dynamic> json) => LegacyUser();
-}
-```
-
-Ignore for a whole file:
-
-```dart
-// ignore_for_file: require_json_serializable_from_json, require_json_serializable_to_json
-```
+See examples for detailed options.
 
 ## More info
 
