@@ -14,11 +14,11 @@ class RequireJsonSerializableToJson extends AnalysisRule {
   );
 
   RequireJsonSerializableToJson()
-    : super(
-        name: 'require_json_serializable_to_json',
-        description:
-            '@JsonSerializable classes must declare `Map<String, dynamic> toJson()`.',
-      );
+      : super(
+          name: 'require_json_serializable_to_json',
+          description:
+              '@JsonSerializable classes must declare `Map<String, dynamic> toJson()`.',
+        );
 
   @override
   LintCode get diagnosticCode => code;
