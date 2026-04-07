@@ -1,12 +1,12 @@
 import 'package:analyzer_testing/analysis_rule/analysis_rule.dart';
-import 'package:json_serializable_lints/rules/require_json_serializable_to_json.dart';
+import 'package:json_serializable_lints/rules/require_to_json_rule.dart';
 import 'package:test_reflective_loader/test_reflective_loader.dart';
 
 @reflectiveTest
-class RequireJsonSerializableToJsonTest extends AnalysisRuleTest {
+class RequireToJsonRuleTest extends AnalysisRuleTest {
   @override
   void setUp() {
-    rule = RequireJsonSerializableToJson();
+    rule = RequireToJsonRule();
     super.setUp();
   }
 
@@ -86,6 +86,6 @@ class TestClass {
 
 void main() {
   defineReflectiveSuite(() {
-    defineReflectiveTests(RequireJsonSerializableToJsonTest);
+    defineReflectiveTests(RequireToJsonRuleTest);
   });
 }

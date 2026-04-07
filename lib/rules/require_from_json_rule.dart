@@ -6,14 +6,14 @@ import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/error/error.dart';
 
-class RequireJsonSerializableFromJson extends AnalysisRule {
+class RequireFromJsonRule extends AnalysisRule {
   static const LintCode code = LintCode(
     'require_json_serializable_from_json',
     '@JsonSerializable classes must declare `factory ClassName.fromJson(Map<String, dynamic> json)`.',
     severity: DiagnosticSeverity.WARNING,
   );
 
-  RequireJsonSerializableFromJson()
+  RequireFromJsonRule()
       : super(
           name: 'require_json_serializable_from_json',
           description:
