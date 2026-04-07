@@ -31,9 +31,23 @@ class JsonSerializable {
 @JsonSerializable()
 class TestClass {
   const TestClass();
-  factory TestClass.fromJson(Map<String, dynamic> json) => TestClass();
+  factory TestClass.fromJson(Map<String, dynamic> json_any_name) => TestClass();
 }
 ''');
+  }
+
+  void test_present_invalid_signature() async {
+    await assertDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createFactory = true});
+}
+
+@JsonSerializable()
+class TestClass {
+  const TestClass();
+  factory TestClass.fromJson(int json) => TestClass();
+}
+''', [lint(78, 115)]);
   }
 
   void test_no_annotation() async {
