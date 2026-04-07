@@ -42,6 +42,18 @@ class TestClass {
 }
 ''');
   }
+
+  void test_disabled() async {
+    await assertNoDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createFactory = true});
+}
+
+@JsonSerializable(createFactory: false)
+class TestClass {
+}
+''');
+  }
 }
 
 void main() {
