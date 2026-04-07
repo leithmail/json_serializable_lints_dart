@@ -88,7 +88,7 @@ class _Visitor extends SimpleAstVisitor<void> {
     final parameter = parameters.single;
     final type = _normalizeTypeSource(parameter.type.getDisplayString());
 
-    return type == 'Map<String,dynamic>' && parameter.name == 'json';
+    return type == 'Map<String,dynamic>';
   }
 
   static String _normalizeTypeSource(String? source) {
