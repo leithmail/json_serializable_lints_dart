@@ -10,10 +10,28 @@ class RequireJsonSerializableToJsonTest extends AnalysisRuleTest {
     super.setUp();
   }
 
-  void test_ok() async {
+  void test_missing() async {
+    await assertDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createToJson = true});
+}
+
+@JsonSerializable()
+class TestClass {
+}
+''', [lint(77, 39)]);
+  }
+
+  void test_present() async {
     await assertNoDiagnostics(r'''
-void f(Future<int> p) async {
-  // No await.
+class JsonSerializable {
+  const JsonSerializable({createToJson = true});
+}
+
+@JsonSerializable()
+class TestClass {
+  const TestClass();
+  Map<String, dynamic> toJson() => {};
 }
 ''');
   }
