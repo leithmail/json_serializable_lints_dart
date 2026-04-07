@@ -1,5 +1,8 @@
 # json_serializable_lints
 
+[![CI](https://github.com/leithmail/json_serializable_lints_dart/actions/workflows/ci.yml/badge.svg)](https://github.com/leithmail/json_serializable_lints_dart/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/leithmail/json_serializable_lints_dart/graph/badge.svg?token=BKTXKG5YIG)](https://codecov.io/github/leithmail/json_serializable_lints_dart)
+
 Focused static analysis rules for projects that use `json_serializable`.
 
 `json_serializable` is an excellent library for JSON serialization and deserialization in Dart. However, with current Dart capabilities, each serializable model still needs a small amount of boilerplate — most commonly a `fromJson` factory and a `toJson` method.

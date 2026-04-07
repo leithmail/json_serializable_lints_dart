@@ -10,10 +10,61 @@ class RequireJsonSerializableFromJsonTest extends AnalysisRuleTest {
     super.setUp();
   }
 
-  void test_ok() async {
+  void test_missing() async {
+    await assertDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createFactory = true});
+}
+
+@JsonSerializable()
+class TestClass {
+}
+''', [lint(78, 39)]);
+  }
+
+  void test_present() async {
     await assertNoDiagnostics(r'''
-void f(Future<int> p) async {
-  // No await.
+class JsonSerializable {
+  const JsonSerializable({createFactory = true});
+}
+
+@JsonSerializable()
+class TestClass {
+  const TestClass();
+  factory TestClass.fromJson(Map<String, dynamic> json_any_name) => TestClass();
+}
+''');
+  }
+
+  void test_present_invalid_signature() async {
+    await assertDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createFactory = true});
+}
+
+@JsonSerializable()
+class TestClass {
+  const TestClass();
+  factory TestClass.fromJson(int json) => TestClass();
+}
+''', [lint(78, 115)]);
+  }
+
+  void test_no_annotation() async {
+    await assertNoDiagnostics(r'''
+class TestClass {
+}
+''');
+  }
+
+  void test_disabled() async {
+    await assertNoDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createFactory = true});
+}
+
+@JsonSerializable(createFactory: false)
+class TestClass {
 }
 ''');
   }

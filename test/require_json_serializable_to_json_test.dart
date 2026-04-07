@@ -10,10 +10,75 @@ class RequireJsonSerializableToJsonTest extends AnalysisRuleTest {
     super.setUp();
   }
 
-  void test_ok() async {
+  void test_missing() async {
+    await assertDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createToJson = true});
+}
+
+@JsonSerializable()
+class TestClass {
+}
+''', [lint(77, 39)]);
+  }
+
+  void test_present() async {
     await assertNoDiagnostics(r'''
-void f(Future<int> p) async {
-  // No await.
+class JsonSerializable {
+  const JsonSerializable({createToJson = true});
+}
+
+@JsonSerializable()
+class TestClass {
+  const TestClass();
+  Map<String, dynamic> toJson() => {};
+}
+''');
+  }
+
+  void test_present_invalid_signature_1() async {
+    await assertDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createToJson = true});
+}
+
+@JsonSerializable()
+class TestClass {
+  const TestClass();
+  int toJson() => 0;
+}
+''', [lint(77, 81)]);
+  }
+
+  void test_present_invalid_signature_2() async {
+    await assertDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createToJson = true});
+}
+
+@JsonSerializable()
+class TestClass {
+  const TestClass();
+  Map<String, dynamic> toJson(int nonsense) => {};
+}
+''', [lint(77, 111)]);
+  }
+
+  void test_no_annotation() async {
+    await assertNoDiagnostics(r'''
+class TestClass {
+}
+''');
+  }
+
+  void test_disabled() async {
+    await assertNoDiagnostics(r'''
+class JsonSerializable {
+  const JsonSerializable({createToJson = true});
+}
+
+@JsonSerializable(createToJson: false)
+class TestClass {
 }
 ''');
   }

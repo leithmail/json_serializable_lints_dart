@@ -42,9 +42,11 @@ class _Visitor extends SimpleAstVisitor<void> {
 
   @override
   void visitClassDeclaration(ClassDeclaration node) {
-    if (!_hasJsonSerializableAnnotation(node)) return;
+    if (!_hasJsonSerializableAnnotation(node)) {
+      return;
+    }
     final element = node.declaredFragment?.element;
-    if (element == null) return;
+    if (element == null) return; // coverage:ignore-line
 
     final hasValidFromJson = element.constructors.any(_isValidFromJson);
 
@@ -79,12 +81,14 @@ class _Visitor extends SimpleAstVisitor<void> {
     }
 
     final parameters = constructor.formalParameters;
-    if (parameters.length != 1) return false;
+    if (parameters.length != 1) {
+      return false;
+    }
 
     final parameter = parameters.single;
     final type = _normalizeTypeSource(parameter.type.getDisplayString());
 
-    return type == 'Map<String,dynamic>' && parameter.name == 'json';
+    return type == 'Map<String,dynamic>';
   }
 
   static String _normalizeTypeSource(String? source) {
