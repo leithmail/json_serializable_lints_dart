@@ -35,6 +35,13 @@ class TestClass {
 }
 ''');
   }
+
+  void test_no_annotation() async {
+    await assertNoDiagnostics(r'''
+class TestClass {
+}
+''');
+  }
 }
 
 void main() {
