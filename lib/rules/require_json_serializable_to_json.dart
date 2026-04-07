@@ -46,9 +46,7 @@ class _Visitor extends SimpleAstVisitor<void> {
       return;
     }
     final element = node.declaredFragment?.element;
-    if (element == null) {
-      return;
-    }
+    if (element == null) return; // coverage:ignore-line
 
     final hasValidToJson = element.methods.any(_isValidToJson);
 
