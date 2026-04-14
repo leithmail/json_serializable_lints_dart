@@ -3,21 +3,20 @@ import 'package:analyzer/analysis_rule/rule_context.dart';
 import 'package:analyzer/analysis_rule/rule_visitor_registry.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/error/error.dart';
+import 'package:json_serializable_lints/src/is_valid_to_json.dart';
 
 class RequireToJsonRule extends AnalysisRule {
   static const LintCode code = LintCode(
     'require_json_serializable_to_json',
-    '@JsonSerializable classes must declare `Map<String, dynamic> toJson()`.',
+    '@JsonSerializable classes must declare `toJson()`',
     severity: DiagnosticSeverity.WARNING,
   );
 
   RequireToJsonRule()
       : super(
           name: 'require_json_serializable_to_json',
-          description:
-              '@JsonSerializable classes must declare `Map<String, dynamic> toJson()`.',
+          description: '@JsonSerializable classes must declare `toJson()`',
         );
 
   @override
@@ -48,7 +47,7 @@ class _Visitor extends SimpleAstVisitor<void> {
     final element = node.declaredFragment?.element;
     if (element == null) return; // coverage:ignore-line
 
-    final hasValidToJson = element.methods.any(_isValidToJson);
+    final hasValidToJson = element.methods.any(isValidToJson);
 
     if (!hasValidToJson) {
       rule.reportAtNode(node);
@@ -73,17 +72,5 @@ class _Visitor extends SimpleAstVisitor<void> {
           (arg.expression as BooleanLiteral).value == false,
     );
     return !hasCreateToJsonFalse;
-  }
-
-  bool _isValidToJson(MethodElement method) {
-    return method.name == 'toJson' &&
-        !method.isStatic &&
-        method.formalParameters.isEmpty &&
-        _normalizeTypeSource(method.returnType.getDisplayString()) ==
-            'Map<String,dynamic>';
-  }
-
-  static String _normalizeTypeSource(String? source) {
-    return source?.replaceAll(RegExp(r'\s+'), '') ?? '';
   }
 }
