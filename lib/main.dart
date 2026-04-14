@@ -14,6 +14,6 @@ class JsonSerializableLints extends Plugin {
   void register(PluginRegistry registry) {
     registry.registerWarningRule(RequireToJsonRule());
     registry.registerWarningRule(RequireFromJsonRule());
-    registry.registerLintRule(RequireFromJsonAnnotationRule());
+    registry.registerWarningRule(RequireFromJsonAnnotationRule());
   }
 }
