@@ -3,13 +3,13 @@ import 'package:analyzer/analysis_rule/rule_context.dart';
 import 'package:analyzer/analysis_rule/rule_visitor_registry.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
-import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/error/error.dart';
+import 'package:json_serializable_lints/src/is_valid_from_json.dart';
 
 class RequireFromJsonRule extends AnalysisRule {
   static const LintCode code = LintCode(
     'require_json_serializable_from_json',
-    '@JsonSerializable classes must declare `factory ClassName.fromJson(Map<String, dynamic> json)`.',
+    '@JsonSerializable classes must declare `factory ClassName.fromJson(json)`',
     severity: DiagnosticSeverity.WARNING,
   );
 
@@ -17,7 +17,7 @@ class RequireFromJsonRule extends AnalysisRule {
       : super(
           name: 'require_json_serializable_from_json',
           description:
-              '@JsonSerializable classes must declare `factory ClassName.fromJson(Map<String, dynamic> json)`.',
+              '@JsonSerializable classes must declare `factory ClassName.fromJson(json)`',
         );
 
   @override
@@ -48,7 +48,7 @@ class _Visitor extends SimpleAstVisitor<void> {
     final element = node.declaredFragment?.element;
     if (element == null) return; // coverage:ignore-line
 
-    final hasValidFromJson = element.constructors.any(_isValidFromJson);
+    final hasValidFromJson = element.constructors.any(isValidFromJson);
 
     if (!hasValidFromJson) {
       rule.reportAtNode(node);
@@ -73,25 +73,5 @@ class _Visitor extends SimpleAstVisitor<void> {
           (arg.expression as BooleanLiteral).value == false,
     );
     return !hasCreateFactoryFalse;
-  }
-
-  bool _isValidFromJson(ConstructorElement constructor) {
-    if (!constructor.isFactory || constructor.name != 'fromJson') {
-      return false;
-    }
-
-    final parameters = constructor.formalParameters;
-    if (parameters.length != 1) {
-      return false;
-    }
-
-    final parameter = parameters.single;
-    final type = _normalizeTypeSource(parameter.type.getDisplayString());
-
-    return type == 'Map<String,dynamic>';
-  }
-
-  static String _normalizeTypeSource(String? source) {
-    return source?.replaceAll(RegExp(r'\s+'), '') ?? '';
   }
 }
