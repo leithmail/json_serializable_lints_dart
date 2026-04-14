@@ -36,8 +36,8 @@ class TestClass {
 ''');
   }
 
-  void test_present_invalid_signature() async {
-    await assertDiagnostics(r'''
+  void test_present_int_signature() async {
+    await assertNoDiagnostics(r'''
 class JsonSerializable {
   const JsonSerializable({createFactory = true});
 }
@@ -47,7 +47,7 @@ class TestClass {
   const TestClass();
   factory TestClass.fromJson(int json) => TestClass();
 }
-''', [lint(78, 115)]);
+''');
   }
 
   void test_no_annotation() async {

@@ -36,8 +36,8 @@ class TestClass {
 ''');
   }
 
-  void test_present_invalid_signature_1() async {
-    await assertDiagnostics(r'''
+  void test_present_int_signature() async {
+    await assertNoDiagnostics(r'''
 class JsonSerializable {
   const JsonSerializable({createToJson = true});
 }
@@ -47,10 +47,10 @@ class TestClass {
   const TestClass();
   int toJson() => 0;
 }
-''', [lint(77, 81)]);
+''');
   }
 
-  void test_present_invalid_signature_2() async {
+  void test_present_invalid_signature() async {
     await assertDiagnostics(r'''
 class JsonSerializable {
   const JsonSerializable({createToJson = true});
