@@ -63,13 +63,13 @@ class _Visitor extends SimpleAstVisitor<void> {
       return false;
     }
 
-    final args = annotation.arguments?.arguments ?? const <Expression>[];
+    final args = annotation.arguments?.arguments ?? const <Argument>[];
     final hasCreateToJsonFalse = args.any(
       (arg) =>
-          arg is NamedExpression &&
-          arg.name.label.name == 'createToJson' &&
-          arg.expression is BooleanLiteral &&
-          (arg.expression as BooleanLiteral).value == false,
+          arg is NamedArgument &&
+          arg.name.lexeme == 'createToJson' &&
+          arg.argumentExpression is BooleanLiteral &&
+          (arg.argumentExpression as BooleanLiteral).value == false,
     );
     return !hasCreateToJsonFalse;
   }

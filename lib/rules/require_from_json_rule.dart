@@ -64,13 +64,13 @@ class _Visitor extends SimpleAstVisitor<void> {
       return false;
     }
 
-    final args = annotation.arguments?.arguments ?? const <Expression>[];
+    final args = annotation.arguments?.arguments ?? const <Argument>[];
     final hasCreateFactoryFalse = args.any(
       (arg) =>
-          arg is NamedExpression &&
-          arg.name.label.name == 'createFactory' &&
-          arg.expression is BooleanLiteral &&
-          (arg.expression as BooleanLiteral).value == false,
+          arg is NamedArgument &&
+          arg.name.lexeme == 'createFactory' &&
+          arg.argumentExpression is BooleanLiteral &&
+          (arg.argumentExpression as BooleanLiteral).value == false,
     );
     return !hasCreateFactoryFalse;
   }
